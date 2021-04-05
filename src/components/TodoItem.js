@@ -1,19 +1,20 @@
 import React from 'react'
 
-class TodoItem extends React.Component{
+function ToDoItem(props) {
+    return(
+    <div>
+        <input         
+        type='checkbox' 
+        id={props.name}
+        />
 
-    render(){
-
-        return (
-            <div>
-                <input type="checkbox"/>
-                <label className = "bg-green-500" >{this.props.movieName} <strong className="bg-green-700">{this.props.movieYear}</strong> </label>
-            </div>
-            
-        )
-    }
+        <label 
+            htmlFor={props.name}
+            // Tailwind Styles
+            className = "bg-green-500">
+                {props.name} {props.year}
+        </label>
+    </div>)
 }
 
-
-
-export default TodoItem
+export default ToDoItem

@@ -1,14 +1,22 @@
 import React from 'react'
 import TodoItem from './components/TodoItem'
+import todoData from './components/todoData'
 
 class App extends React.Component{
+
+    todoItems = todoData.map(
+        function (items) {
+            return <TodoItem  />
+        }
+    )
+    
+    
     render (){
 
         return(
             
             <div>
-                <h3 className="text-gray-900">The List </h3>
-                <TodoItem movieName='The Fog' movieYear='1980'/>
+                <TodoItem name='The Fog' year='1980'/>
             </div>
         )
     }
