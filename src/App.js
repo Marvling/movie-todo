@@ -4,11 +4,9 @@ import todoData from './components/todoData'
 
 class App extends React.Component{
 
-    todoItems = todoData.map(
-        function (items) {
-            return <TodoItem  />
-        }
-    )
+    todoItemsList = todoData.map( 
+            (items) => <TodoItem  key={items.id} todoObject={items} /> 
+        )
     
     
     render (){
@@ -16,7 +14,7 @@ class App extends React.Component{
         return(
             
             <div>
-                <TodoItem name='The Fog' year='1980'/>
+               {this.todoItemsList}
             </div>
         )
     }

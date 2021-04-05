@@ -6,13 +6,14 @@ function ToDoItem(props) {
         <input         
         type='checkbox' 
         id={props.name}
+        checked={props.todoObject.isWatched}
         />
 
         <label 
-            htmlFor={props.name}
+            htmlFor={props.todoObject.name}
             // Tailwind Styles
             className = "bg-green-500">
-                {props.name} {props.year}
+                {props.todoObject.name} {props.todoObject.year}
         </label>
     </div>)
 }
