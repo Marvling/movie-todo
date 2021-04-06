@@ -3,17 +3,17 @@ import React from 'react'
 function ToDoItem(props) {
     return(
     <div>
-        <input         
+        <input     
         type='checkbox' 
         id={props.name}
         checked={props.todoObject.isWatched}
+        onChange={() => props.handleChange(props.todoObject.id)}
         />
 
         <label 
             htmlFor={props.todoObject.name}
-            // Tailwind Styles
-            className = "bg-green-500">
-                {props.todoObject.name} {props.todoObject.year}
+            >
+            {props.todoObject.name} {props.todoObject.year}
         </label>
     </div>)
 }

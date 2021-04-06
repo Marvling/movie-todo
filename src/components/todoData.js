@@ -23,7 +23,7 @@ const todoData= [
     },
     {
         id:4,
-        name:'Lords of The Dead',
+        name:'Lords of The Deep',
         year: 1989,
         isWatched: false,
         dateWatched: '',
