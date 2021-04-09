@@ -19,9 +19,11 @@ class App extends React.Component{
             
         
         this.state = {
-            typedName: 'bok',
+            typedName: '',
             todoDataArray: todoData,
-            numberOfWatched: numberWatched
+            numberOfWatched: numberWatched,
+
+            debugObject: {}
         }
     }
 
@@ -42,25 +44,31 @@ class App extends React.Component{
       }
     
     handleSubmit(event) {
-        // alert('A name was submitted: ' + this.state.typedName);
+        
+        console.log('am I fired')
         
 
-        this.setState((prevState)=> {
-            let objectToAdd = {
-                id: prevState.todoDataArray[prevState.todoDataArray.length-1].id + 1,
+        this.setState((prevState) => {
+
+            let updatedTodoDataArray = prevState.todoDataArray
+
+            console.log(updatedTodoDataArray);
+
+            let newTodoItem = {
+                id: prevState.todoDataArray.length + 1,
                 name: prevState.typedName,
-                year: 3000,
-                isWatched: false,
-                dateWatched: ''
+                year: 1800,
+                isWatched: false
             }
+            updatedTodoDataArray.push(newTodoItem)
+            updatedTodoDataArray = Array.from(new Set(updatedTodoDataArray));
 
-            // let updatedTodoArray = prevState
-            // updatedTodoArray.todoDataArray.push(objectToAdd)
-
-            // return{todoDataArray: updatedTodoArray}
+            return {
+                todoDataArray: updatedTodoDataArray,
+            }
         })
 
-
+        this.countWatched();
         event.preventDefault();
       }
 
@@ -82,7 +90,6 @@ class App extends React.Component{
         })
 
         this.countWatched();
-
         
     }
     
@@ -97,25 +104,22 @@ class App extends React.Component{
             /> 
         )
 
-
         return(
             <div className='m-2'>
                 {todoItemsList}
-                <p
-                    className='p-2 text-lg text-green-900'>
-                    Movies Watched : {this.state.numberOfWatched}/{this.state.todoDataArray.length}
-                </p>
-                <p
-                    className='p-2 text-lg text-green-900'>
-                    Input : {this.state.typedName}
-                </p>
 
+                <p
+                    className='p-2 text-lg text-green-900'>
+                    Movies Watched : {this.state.numberOfWatched 
+                    /* TODO: Put a for loop that  checks for the comnpleted items and get rid of the numberOfWatched state & function*/}
+                    /{this.state.todoDataArray.length}
+                </p>
                 
                 <form onSubmit={this.handleSubmit}> 
-                    <label>
-                        Name:
-                        <input type="text"  onChange={this.handleInput} />
+                    <label >
+                        Name: <input className='bg-red-400' type="text"  onChange={this.handleInput} />
                     </label>
+
                     <input type="submit" value="Submit" />
                 </form>
 
