@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ToDoItem(props) {
+const ToDoItem = (props) => {
     return(
     <div>
         <input     
@@ -11,8 +11,7 @@ function ToDoItem(props) {
         />
 
         <label 
-            htmlFor={props.todoObject.name}
-            >
+            htmlFor={props.todoObject.name}>
             {props.todoObject.name} {props.todoObject.year}
         </label>
     </div>)
