@@ -7,11 +7,10 @@ const ToDoItem = (props) => {
         type='checkbox' 
         id={props.name}
         checked={props.todoObject.isWatched}
-        onChange={() => props.handleChange(props.todoObject.id)}
+        onChange={() => props.handleCheckbox(props.todoObject.id)}
         />
 
-        <label 
-            htmlFor={props.todoObject.name}>
+        <label htmlFor={props.todoObject.name}>
             {props.todoObject.name} {props.todoObject.year}
         </label>
     </div>)

@@ -1,23 +1,21 @@
 import React from 'react'
 import TodoItem from './components/TodoItem'
+import SearchBar from './components/SearchBar'
 import todoData from './components/todoData'
 
 class App extends React.Component{
     constructor(props){
         super(props)
 
-        this.handleChange = this.handleChange.bind(this)
+        this.handleCheckbox = this.handleCheckbox.bind(this)
         this.handleInput = this.handleInput.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
 
-        
         let numberWatched = 0;
             for (let i = 0; i <todoData.length; i++) {
             if (todoData[i].isWatched) {numberWatched++};
         }
-        
-            
-        
+
         this.state = {
             typedName: '',
             todoDataArray: todoData,
@@ -35,24 +33,19 @@ class App extends React.Component{
             if (prevState.todoDataArray[i].isWatched) {updatedNumber++};
         }
             return {numberOfWatched: updatedNumber}
-            
+
         })
-        
+
     }
     handleInput(event) {
-        this.setState({typedName: event.target.value});
+        this.setState({typedName: event.target.value})
       }
-    
-    handleSubmit(event) {
-        
-        console.log('am I fired')
-        
 
+    handleSubmit(event) {
+                
         this.setState((prevState) => {
 
             let updatedTodoDataArray = prevState.todoDataArray
-
-            console.log(updatedTodoDataArray);
 
             let newTodoItem = {
                 id: prevState.todoDataArray.length + 1,
@@ -60,11 +53,14 @@ class App extends React.Component{
                 year: 1800,
                 isWatched: false
             }
+
             updatedTodoDataArray.push(newTodoItem)
+            // .push creates a duplicate item for some reason, bleow line clears the duplicate item
             updatedTodoDataArray = Array.from(new Set(updatedTodoDataArray));
 
             return {
                 todoDataArray: updatedTodoDataArray,
+                typedName: ''
             }
         })
 
@@ -72,59 +68,49 @@ class App extends React.Component{
         event.preventDefault();
       }
 
-    handleChange(id){
+    handleCheckbox(id){
         this.setState(prevState => { 
             const updatedTodoArray = prevState.todoDataArray.map(todo => {
                 if (todo.id === id) {
                     return{
                         ...todo,
                         isWatched: !todo.isWatched
-                    }
-                }
+                    }}
 
                 return todo
             })
-            return {
-                todoDataArray: updatedTodoArray,
-            }
+            return {todoDataArray: updatedTodoArray}
         })
 
         this.countWatched();
-        
     }
-    
-    
+
     render (){
 
-        const todoItemsList = this.state.todoDataArray.map( 
-            (items) => <TodoItem  
+        const todoItemsList = this.state.todoDataArray.map((items) => 
+            <TodoItem  
                 key={items.id} 
                 todoObject={items} 
-                handleChange = {this.handleChange}
-            /> 
-        )
+                handleCheckbox = {this.handleCheckbox}/> 
+            )
 
         return(
             <div className='m-2'>
+
                 {todoItemsList}
 
-                <p
-                    className='p-2 text-lg text-green-900'>
-                    Movies Watched : {this.state.numberOfWatched 
-                    /* TODO: Put a for loop that  checks for the comnpleted items and get rid of the numberOfWatched state & function*/}
-                    /{this.state.todoDataArray.length}
+                <p className='p-2 text-lg text-green-900'>
+                    {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
-                
-                <form onSubmit={this.handleSubmit}> 
-                    <label >
-                        Name: <input className='bg-red-400' type="text"  onChange={this.handleInput} />
-                    </label>
 
-                    <input type="submit" value="Submit" />
-                </form>
+                <SearchBar 
+                    handleSubmit={this.handleSubmit} 
+                    handleInput={this.handleInput} 
+                    value={this.state.typedName}/>
 
             </div>
         )
     }
 }
+
 export default App
