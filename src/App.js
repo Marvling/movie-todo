@@ -12,9 +12,11 @@ class App extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this)
 
         let numberWatched = 0;
-            for (let i = 0; i <todoData.length; i++) {
-            if (todoData[i].isWatched) {numberWatched++};
+            for (let movie of todoData) {
+            if (movie.isWatched) {numberWatched++};
         }
+
+        
 
         this.state = {
             typedName: '',
@@ -29,8 +31,8 @@ class App extends React.Component{
         let updatedNumber = 0
 
         this.setState( (prevState)=>{
-            for (let i = 0; i < prevState.todoDataArray.length; i++) {
-            if (prevState.todoDataArray[i].isWatched) {updatedNumber++};
+            for (let item of prevState.todoDataArray) {
+            if (item.isWatched) {updatedNumber++};
         }
             return {numberOfWatched: updatedNumber}
 
@@ -63,8 +65,7 @@ class App extends React.Component{
                 typedName: ''
             }
         })
-
-        this.countWatched();
+        
         event.preventDefault();
       }
 
