@@ -7,17 +7,10 @@ class App extends React.Component{
     constructor(props){
         super(props)
 
-        this.handleCheckbox = this.handleCheckbox.bind(this)
-        this.handleInput = this.handleInput.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-
         let numberWatched = 0;
             for (let movie of todoData) {
             if (movie.isWatched) {numberWatched++};
         }
-
-        
-
         this.state = {
             typedName: '',
             todoDataArray: todoData,
@@ -27,7 +20,9 @@ class App extends React.Component{
         }
     }
 
-    countWatched(){
+    
+    
+    countWatchedw = () => {
         let updatedNumber = 0
 
         this.setState( (prevState)=>{
@@ -39,11 +34,11 @@ class App extends React.Component{
         })
 
     }
-    handleInput(event) {
+    handleInput = (event) => {
         this.setState({typedName: event.target.value})
       }
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
                 
         this.setState((prevState) => {
 
@@ -69,7 +64,23 @@ class App extends React.Component{
         event.preventDefault();
       }
 
-    handleCheckbox(id){
+      searchMovies = async (event) => {
+
+        event.preventDefault();
+
+        let query = this.state.typedName
+
+        let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${query}&page=1&include_adult=false`
+        
+        try{
+        let response = await fetch(url)
+        let data = await response.json()
+
+        console.log(data.results[0].original_title)
+        }catch(err){console.error(err)}
+    }
+
+    handleCheckbox = (id) => {
         this.setState(prevState => { 
             const updatedTodoArray = prevState.todoDataArray.map(todo => {
                 if (todo.id === id) {
@@ -103,9 +114,12 @@ class App extends React.Component{
                 <p className='p-2 text-lg text-green-900'>
                     {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
+                <p className='p-2 text-lg text-green-900'>
+                    {`Typing: ${this.state.typedName}`}
+                </p>
 
                 <SearchBar 
-                    handleSubmit={this.handleSubmit} 
+                    handleSubmit={this.searchMovies} 
                     handleInput={this.handleInput} 
                     value={this.state.typedName}/>
 
