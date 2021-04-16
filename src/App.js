@@ -16,13 +16,21 @@ class App extends React.Component{
             todoDataArray: todoData,
             numberOfWatched: numberWatched,
 
-            debugObject: {}
+            moviesSearched: [],
+            movieToAdd: {
+                id:'',
+                name:'',
+                year: '',
+                isWatched: false,
+                dateWatched: '',
+                
+            }
         }
     }
 
     
     
-    countWatchedw = () => {
+    countWatched = () => {
         let updatedNumber = 0
 
         this.setState( (prevState)=>{
@@ -36,20 +44,17 @@ class App extends React.Component{
     }
     handleInput = (event) => {
         this.setState({typedName: event.target.value})
+        this.searchMovies();
+
       }
+
 
     handleSubmit = (event) => {
                 
         this.setState((prevState) => {
 
             let updatedTodoDataArray = prevState.todoDataArray
-
-            let newTodoItem = {
-                id: prevState.todoDataArray.length + 1,
-                name: prevState.typedName,
-                year: 1800,
-                isWatched: false
-            }
+            let newTodoItem = this.state.movieToAdd
 
             updatedTodoDataArray.push(newTodoItem)
             // .push creates a duplicate item for some reason, bleow line clears the duplicate item
@@ -64,20 +69,35 @@ class App extends React.Component{
         event.preventDefault();
       }
 
-      searchMovies = async (event) => {
+      searchMovies = async () => {
 
-        event.preventDefault();
+        // event.preventDefault();
 
         let query = this.state.typedName
-
         let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${query}&page=1&include_adult=false`
         
         try{
-        let response = await fetch(url)
-        let data = await response.json()
+            const response = await fetch(url)
+            const data = await response.json()
 
-        console.log(data.results[0].original_title)
-        }catch(err){console.error(err)}
+            const name = data.results[0].original_title
+            const date = data.results[0].release_date
+            const year = date.slice(0,4)
+
+            this.setState({movieToAdd: {
+                id: this.state.todoDataArray.length + 1,
+                name: name,
+                year: year,
+                isWatched: false,
+                dateWatched: ''
+                }
+            })
+
+            this.setState({moviesSearched: data})
+        }catch(err){
+            console.error(err)
+        }
+
     }
 
     handleCheckbox = (id) => {
@@ -105,6 +125,8 @@ class App extends React.Component{
                 todoObject={items} 
                 handleCheckbox = {this.handleCheckbox}/> 
             )
+        
+        // TODO: Make a seperate react component to display the autocomplete results
 
         return(
             <div className='m-2'>
@@ -114,14 +136,12 @@ class App extends React.Component{
                 <p className='p-2 text-lg text-green-900'>
                     {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
-                <p className='p-2 text-lg text-green-900'>
-                    {`Typing: ${this.state.typedName}`}
-                </p>
 
                 <SearchBar 
-                    handleSubmit={this.searchMovies} 
+                    handleSubmit={this.handleSubmit} 
                     handleInput={this.handleInput} 
-                    value={this.state.typedName}/>
+                    value={this.state.typedName}
+                    />
 
             </div>
         )

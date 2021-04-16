@@ -1,18 +1,18 @@
 import React from 'react'
 
 function SearchBar (props) {
+
    return(
-   <form onSubmit={props.handleSubmit}> 
-        <label>
-            Name: <input 
+    <div>
+        <form onSubmit={props.handleSubmit}> 
+        <input 
             className='bg-red-400' 
             type="text"
             onChange={props.handleInput}
-            value={props.value}
-            />
-        </label>
+            value={props.value}/>
         <button>Add to List</button>
-    </form>
+        </form>
+    </div>
     )
 }
 export default SearchBar
