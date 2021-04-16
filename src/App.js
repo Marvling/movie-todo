@@ -1,130 +1,151 @@
 import React from 'react'
 import TodoItem from './components/TodoItem'
+import SearchBar from './components/SearchBar'
 import todoData from './components/todoData'
 
 class App extends React.Component{
     constructor(props){
         super(props)
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleInput = this.handleInput.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-
-        
         let numberWatched = 0;
-            for (let i = 0; i <todoData.length; i++) {
-            if (todoData[i].isWatched) {numberWatched++};
+            for (let movie of todoData) {
+            if (movie.isWatched) {numberWatched++};
         }
-        
-            
-        
         this.state = {
             typedName: '',
             todoDataArray: todoData,
             numberOfWatched: numberWatched,
 
-            debugObject: {}
+            moviesSearched: [],
+            movieToAdd: {
+                id:'',
+                name:'',
+                year: '',
+                isWatched: false,
+                dateWatched: '',
+                
+            }
         }
     }
 
-    countWatched(){
+    
+    
+    countWatched = () => {
         let updatedNumber = 0
 
         this.setState( (prevState)=>{
-            for (let i = 0; i < prevState.todoDataArray.length; i++) {
-            if (prevState.todoDataArray[i].isWatched) {updatedNumber++};
+            for (let item of prevState.todoDataArray) {
+            if (item.isWatched) {updatedNumber++};
         }
             return {numberOfWatched: updatedNumber}
-            
-        })
-        
-    }
-    handleInput(event) {
-        this.setState({typedName: event.target.value});
-      }
-    
-    handleSubmit(event) {
-        
-        console.log('am I fired')
-        
 
+        })
+
+    }
+    handleInput = (event) => {
+        this.setState({typedName: event.target.value})
+        this.searchMovies();
+
+      }
+
+
+    handleSubmit = (event) => {
+                
         this.setState((prevState) => {
 
             let updatedTodoDataArray = prevState.todoDataArray
+            let newTodoItem = this.state.movieToAdd
 
-            console.log(updatedTodoDataArray);
-
-            let newTodoItem = {
-                id: prevState.todoDataArray.length + 1,
-                name: prevState.typedName,
-                year: 1800,
-                isWatched: false
-            }
             updatedTodoDataArray.push(newTodoItem)
+            // .push creates a duplicate item for some reason, bleow line clears the duplicate item
             updatedTodoDataArray = Array.from(new Set(updatedTodoDataArray));
 
             return {
                 todoDataArray: updatedTodoDataArray,
+                typedName: ''
             }
         })
-
-        this.countWatched();
+        
         event.preventDefault();
       }
 
-    handleChange(id){
+      searchMovies = async () => {
+
+        // event.preventDefault();
+
+        let query = this.state.typedName
+        let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${query}&page=1&include_adult=false`
+        
+        try{
+            const response = await fetch(url)
+            const data = await response.json()
+
+            const name = data.results[0].original_title
+            const date = data.results[0].release_date
+            const year = date.slice(0,4)
+
+            this.setState({movieToAdd: {
+                id: this.state.todoDataArray.length + 1,
+                name: name,
+                year: year,
+                isWatched: false,
+                dateWatched: ''
+                }
+            })
+
+            this.setState({moviesSearched: data})
+        }catch(err){
+            console.error(err)
+        }
+
+    }
+
+    handleCheckbox = (id) => {
         this.setState(prevState => { 
             const updatedTodoArray = prevState.todoDataArray.map(todo => {
                 if (todo.id === id) {
                     return{
                         ...todo,
                         isWatched: !todo.isWatched
-                    }
-                }
+                    }}
 
                 return todo
             })
-            return {
-                todoDataArray: updatedTodoArray,
-            }
+            return {todoDataArray: updatedTodoArray}
         })
 
         this.countWatched();
-        
     }
-    
-    
+
     render (){
 
-        const todoItemsList = this.state.todoDataArray.map( 
-            (items) => <TodoItem  
+        const todoItemsList = this.state.todoDataArray.map((items) => 
+            <TodoItem  
                 key={items.id} 
                 todoObject={items} 
-                handleChange = {this.handleChange}
-            /> 
-        )
+                handleCheckbox = {this.handleCheckbox}/> 
+            )
+        
+        // TODO: Make a seperate react component to display the autocomplete results
 
         return(
             <div className='m-2'>
+
                 {todoItemsList}
 
-                <p
-                    className='p-2 text-lg text-green-900'>
-                    Movies Watched : {this.state.numberOfWatched 
-                    /* TODO: Put a for loop that  checks for the comnpleted items and get rid of the numberOfWatched state & function*/}
-                    /{this.state.todoDataArray.length}
+                <p className='p-2 text-lg text-green-900'>
+                    {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
-                
-                <form onSubmit={this.handleSubmit}> 
-                    <label >
-                        Name: <input className='bg-red-400' type="text"  onChange={this.handleInput} />
-                    </label>
 
-                    <input type="submit" value="Submit" />
-                </form>
+                <SearchBar 
+                    handleSubmit={this.handleSubmit} 
+                    handleInput={this.handleInput} 
+                    value={this.state.typedName}
+                    />
 
             </div>
         )
     }
 }
+
 export default App
