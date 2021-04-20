@@ -11,6 +11,7 @@ class App extends React.Component{
             for (let movie of todoData) {
             if (movie.isWatched) {numberWatched++};
         }
+
         this.state = {
             typedName: '',
             todoDataArray: todoData,
@@ -22,9 +23,13 @@ class App extends React.Component{
                 name:'',
                 year: '',
                 isWatched: false,
-                dateWatched: '',
-                
-            }
+                dateWatched: ''
+            },
+
+            activeSuggestion: 0,
+            filteredSuggestions: [],
+            showSuggestions: false,
+            suggestions: []
         }
     }
 
@@ -42,14 +47,43 @@ class App extends React.Component{
         })
 
     }
-    handleInput = (event) => {
-        this.setState({typedName: event.target.value})
-        this.searchMovies();
+    onChange = event => {
 
-      }
+        event.preventDefault()
+
+        const { suggestions } = this.state;
+        const userInput = event.target.value
+
+        const filteredSuggestions = suggestions.filter(
+            suggestion => suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+        )
+        
+        this.setState({
+            activeSuggestion: 0,
+            filteredSuggestions,
+            showSuggestions:true,
+            typedName: userInput
+        })
+
+        
+        console.log(this.state.filteredSuggestions);
+
+        this.searchMovies()
+
+    }
+
+    onClick = event => {
+
+        this.setState({
+            activeSuggestion: 0,
+            filteredSuggestions: [],
+            showSuggestions: true,
+            typedName: event.currentTarget.innerText
+        })
+    }
 
 
-    handleSubmit = (event) => {
+    handleSubmit = event => {
                 
         this.setState((prevState) => {
 
@@ -67,11 +101,9 @@ class App extends React.Component{
         })
         
         event.preventDefault();
-      }
+    }
 
-      searchMovies = async () => {
-
-        // event.preventDefault();
+    searchMovies = async () => {
 
         let query = this.state.typedName
         let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${query}&page=1&include_adult=false`
@@ -80,20 +112,24 @@ class App extends React.Component{
             const response = await fetch(url)
             const data = await response.json()
 
-            const name = data.results[0].original_title
-            const date = data.results[0].release_date
-            const year = date.slice(0,4)
+            let suggestions = data.results.slice(0,5)
+            suggestions = suggestions.map(movie => movie.original_title)
+            console.log(suggestions)
 
-            this.setState({movieToAdd: {
-                id: this.state.todoDataArray.length + 1,
-                name: name,
-                year: year,
-                isWatched: false,
-                dateWatched: ''
-                }
+            const name = data.results[0].original_title
+            const year = data.results[0].release_date.slice(0,4)
+
+            this.setState({
+                movieToAdd: {
+                    id: this.state.todoDataArray.length + 1,
+                    name: name,
+                    year: year,
+                    isWatched: false,
+                    dateWatched: ''
+                },
+                suggestions,
             })
 
-            this.setState({moviesSearched: data})
         }catch(err){
             console.error(err)
         }
@@ -119,6 +155,7 @@ class App extends React.Component{
 
     render (){
 
+        //TODO ITEM LOGIC
         const todoItemsList = this.state.todoDataArray.map((items) => 
             <TodoItem  
                 key={items.id} 
@@ -126,7 +163,38 @@ class App extends React.Component{
                 handleCheckbox = {this.handleCheckbox}/> 
             )
         
-        // TODO: Make a seperate react component to display the autocomplete results
+        // AUTOSUGGEST LOGIC
+        let suggestionsListComponent;
+
+        if (this.state.showSuggestions && this.state.typedName) {
+            
+            if (this.state.filteredSuggestions.length) {
+                
+                suggestionsListComponent = (
+                    <ul className="suggestions">
+                        {this.state.filteredSuggestions.map((suggesiton, index) => {
+                            let className;
+
+                            // flag the active suggestion with a class
+                            if (index === this.state.activeSuggestion) {
+                                className = 'suggesion-active'
+                            }
+                            return (
+                                <li className={className} key={suggesiton} onClick={this.onClick}>
+                                    {suggesiton}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                )
+            } else {
+                suggestionsListComponent = (
+                    <div className='no-suggestions'>
+                        <em>No Suggestions available</em>
+                    </div>
+                )
+            }
+        }
 
         return(
             <div className='m-2'>
@@ -139,10 +207,10 @@ class App extends React.Component{
 
                 <SearchBar 
                     handleSubmit={this.handleSubmit} 
-                    handleInput={this.handleInput} 
-                    value={this.state.typedName}
-                    />
+                    onChange={this.onChange} 
+                    value={this.state.typedName}/>
 
+                    {suggestionsListComponent}
             </div>
         )
     }

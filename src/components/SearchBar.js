@@ -8,7 +8,7 @@ function SearchBar (props) {
         <input 
             className='bg-red-400' 
             type="text"
-            onChange={props.handleInput}
+            onChange={props.onChange}
             value={props.value}/>
         <button>Add to List</button>
         </form>
