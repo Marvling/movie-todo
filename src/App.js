@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoItem from './components/TodoItem'
-import SearchBar from './components/SearchBar'
+import SearchBar2 from './components/SearchBar2'
 import todoData from './components/todoData'
 
 class App extends React.Component{
@@ -68,7 +68,7 @@ class App extends React.Component{
         
         console.log(this.state.filteredSuggestions);
 
-        this.searchMovies()
+        // this.searchMovies()
 
     }
 
@@ -114,15 +114,15 @@ class App extends React.Component{
 
             let suggestions = data.results.slice(0,5)
             suggestions = suggestions.map(movie => movie.original_title)
-            console.log(suggestions)
+            
 
-            const name = data.results[0].original_title
+            // const name = data.results[0].original_title
             const year = data.results[0].release_date.slice(0,4)
 
             this.setState({
                 movieToAdd: {
                     id: this.state.todoDataArray.length + 1,
-                    name: name,
+                    name: this.state.typedName,
                     year: year,
                     isWatched: false,
                     dateWatched: ''
@@ -131,8 +131,10 @@ class App extends React.Component{
             })
 
         }catch(err){
-            console.error(err)
+            console.error(`this is my error: ${err}`)
         }
+
+        console.log(`state suggestions ${this.state.suggestions}`)
 
     }
 
@@ -205,10 +207,14 @@ class App extends React.Component{
                     {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
 
-                <SearchBar 
+                {/* <SearchBar
                     handleSubmit={this.handleSubmit} 
                     onChange={this.onChange} 
-                    value={this.state.typedName}/>
+                    value={this.state.typedName}/> */}
+                
+                <SearchBar2 
+                    handleSubmit={this.handleSubmit} 
+                    />
 
                     {suggestionsListComponent}
             </div>
