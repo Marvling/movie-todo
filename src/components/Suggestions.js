@@ -1,26 +1,29 @@
 import React from 'react'
 
 function Suggestions(props) {
-    const onClick = e => {
-        e.preventDefault()
-        console.log(e.target.innerText)
-        //TODO: lift state up to the searchbar component
-    }
 
     //defining a varaible for conditional rendering
     let suggestionsListComponent;
 
+    //If .fetch returned any results the array will be populated
     if (props.suggestionArray.length > 0) {
 
             //spreading the names of the suggestionArray to <li> tag
-            const suggested = props.suggestionArray.map(movie => 
-            <li onClick={onClick}>{movie.original_title}</li>)
+            const suggested = props.suggestionArray.map((movie, index) => 
+
+            //onClick calls the setQuery function which updates the query state to the list innerText
+            <li onClick={props.setQuery}
+                key = {index}
+                id = {movie.id}>
+                {movie.original_title}
+            </li>)
             
             //setting the listComponent with the <li> tags
             suggestionsListComponent = (
             <ul>
                 {[...suggested]}
             </ul>)
+            
         } else {
 
             //setting the listComponent to display a message

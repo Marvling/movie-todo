@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoItem from './components/TodoItem'
-import SearchBar2 from './components/SearchBar2'
+import SearchBar from './components/SearchBar'
 import todoData from './components/todoData'
 
 class App extends React.Component{
@@ -17,7 +17,6 @@ class App extends React.Component{
             todoDataArray: todoData,
             numberOfWatched: numberWatched,
 
-            moviesSearched: [],
             movieToAdd: {
                 id:'',
                 name:'',
@@ -25,11 +24,6 @@ class App extends React.Component{
                 isWatched: false,
                 dateWatched: ''
             },
-
-            activeSuggestion: 0,
-            filteredSuggestions: [],
-            showSuggestions: false,
-            suggestions: []
         }
     }
 
@@ -47,43 +41,9 @@ class App extends React.Component{
         })
 
     }
-    onChange = event => {
+   
 
-        event.preventDefault()
-
-        const { suggestions } = this.state;
-        const userInput = event.target.value
-
-        const filteredSuggestions = suggestions.filter(
-            suggestion => suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-        )
-        
-        this.setState({
-            activeSuggestion: 0,
-            filteredSuggestions,
-            showSuggestions:true,
-            typedName: userInput
-        })
-
-        
-        console.log(this.state.filteredSuggestions);
-
-        // this.searchMovies()
-
-    }
-
-    onClick = event => {
-
-        this.setState({
-            activeSuggestion: 0,
-            filteredSuggestions: [],
-            showSuggestions: true,
-            typedName: event.currentTarget.innerText
-        })
-    }
-
-
-    handleSubmit = event => {
+    handleSubmit = e => {
                 
         this.setState((prevState) => {
 
@@ -99,44 +59,11 @@ class App extends React.Component{
                 typedName: ''
             }
         })
-        
-        event.preventDefault();
+        console.log(e.target[0].id)
+        //TODO: 1- find the movie from e.target[0].id 2- get the necessary data from the found movie 3- add it to todo array
+        e.preventDefault();
     }
 
-    searchMovies = async () => {
-
-        let query = this.state.typedName
-        let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${query}&page=1&include_adult=false`
-        
-        try{
-            const response = await fetch(url)
-            const data = await response.json()
-
-            let suggestions = data.results.slice(0,5)
-            suggestions = suggestions.map(movie => movie.original_title)
-            
-
-            // const name = data.results[0].original_title
-            const year = data.results[0].release_date.slice(0,4)
-
-            this.setState({
-                movieToAdd: {
-                    id: this.state.todoDataArray.length + 1,
-                    name: this.state.typedName,
-                    year: year,
-                    isWatched: false,
-                    dateWatched: ''
-                },
-                suggestions,
-            })
-
-        }catch(err){
-            console.error(`this is my error: ${err}`)
-        }
-
-        console.log(`state suggestions ${this.state.suggestions}`)
-
-    }
 
     handleCheckbox = (id) => {
         this.setState(prevState => { 
@@ -154,6 +81,7 @@ class App extends React.Component{
 
         this.countWatched();
     }
+   
 
     render (){
 
@@ -164,40 +92,6 @@ class App extends React.Component{
                 todoObject={items} 
                 handleCheckbox = {this.handleCheckbox}/> 
             )
-        
-        // AUTOSUGGEST LOGIC
-        let suggestionsListComponent;
-
-        if (this.state.showSuggestions && this.state.typedName) {
-            
-            if (this.state.filteredSuggestions.length) {
-                
-                suggestionsListComponent = (
-                    <ul className="suggestions">
-                        {this.state.filteredSuggestions.map((suggesiton, index) => {
-                            let className;
-
-                            // flag the active suggestion with a class
-                            if (index === this.state.activeSuggestion) {
-                                className = 'suggesion-active'
-                            }
-                            return (
-                                <li className={className} key={suggesiton} onClick={this.onClick}>
-                                    {suggesiton}
-                                </li>
-                            )
-                        })}
-                    </ul>
-                )
-            } else {
-                suggestionsListComponent = (
-                    <div className='no-suggestions'>
-                        <em>No Suggestions available</em>
-                    </div>
-                )
-            }
-        }
-
         return(
             <div className='m-2'>
 
@@ -207,16 +101,8 @@ class App extends React.Component{
                     {`Movies Watched: ${this.state.numberOfWatched}/${this.state.todoDataArray.length}`}
                 </p>
 
-                {/* <SearchBar
-                    handleSubmit={this.handleSubmit} 
-                    onChange={this.onChange} 
-                    value={this.state.typedName}/> */}
-                
-                <SearchBar2 
-                    handleSubmit={this.handleSubmit} 
-                    />
-
-                    {suggestionsListComponent}
+                <SearchBar
+                    handleSubmit={this.handleSubmit} />
             </div>
         )
     }
