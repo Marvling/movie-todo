@@ -20,11 +20,11 @@ function SearchBar (props) {
             }
         }catch(err){
             console.error(`this is my error!: ${err}`)
+            //sets suggestion array to empty so it shows 'no suggestions found' if no movies were found
             setSuggestionArray([])}
     }
 
     const getTmdbId = (e) =>{
-        console.log(e.target.id)
         setTmdbId(e.target.id)
     }
 

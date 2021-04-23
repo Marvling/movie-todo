@@ -41,6 +41,17 @@ class App extends React.Component{
         })
 
     }
+
+    findMovieFromId = async (id) =>{
+        
+        const url = `https://api.themoviedb.org/3/movie/${id}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`
+        
+        try{
+            const response = await fetch(url)
+            const data = await response.json()
+            console.log(data)
+        }catch(err){console.error(err)}
+    }
    
 
     handleSubmit = e => {
@@ -80,6 +91,7 @@ class App extends React.Component{
         })
 
         this.countWatched();
+        this.findMovieFromId(475557);
     }
    
 
@@ -102,7 +114,7 @@ class App extends React.Component{
                 </p>
 
                 <SearchBar
-                    handleSubmit={this.handleSubmit} />
+                    handleSubmit={this.handleSubmit}/>
             </div>
         )
     }
