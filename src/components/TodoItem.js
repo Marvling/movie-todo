@@ -1,17 +1,18 @@
 import React from 'react'
 
 const ToDoItem = (props) => {
+
+
     return(
     <div>
         <input     
         type='checkbox' 
-        id={props.name}
         checked={props.todoObject.isWatched}
         onChange={() => props.handleCheckbox(props.todoObject.id)}
         />
 
-        <label htmlFor={props.todoObject.name}>
-            {props.todoObject.name} {props.todoObject.year}
+        <label htmlFor={props.todoObject.title}>
+            {props.todoObject.title} {props.todoObject.release_date.slice(0, 4)}
         </label>
     </div>)
 }

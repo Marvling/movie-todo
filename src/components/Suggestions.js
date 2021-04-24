@@ -12,10 +12,12 @@ function Suggestions(props) {
             const suggested = props.suggestionArray.map((movie, index) => 
 
             //onClick calls the setQuery function which updates the query state to the list innerText
-            <li onClick={props.setQuery}
+            <li 
+                className={'hover:bg-purple-700 hover:text-white'}
+                onClick={props.setQuery}
                 key = {index}
                 id = {movie.id}>
-                {movie.original_title}
+                {movie.original_title} - {movie.release_date.slice(0, 4)}
             </li>)
             
             //setting the listComponent with the <li> tags

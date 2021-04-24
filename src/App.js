@@ -16,14 +16,8 @@ class App extends React.Component{
             typedName: '',
             todoDataArray: todoData,
             numberOfWatched: numberWatched,
+            movieToAdd: {}
 
-            movieToAdd: {
-                id:'',
-                name:'',
-                year: '',
-                isWatched: false,
-                dateWatched: ''
-            },
         }
     }
 
@@ -49,17 +43,28 @@ class App extends React.Component{
         try{
             const response = await fetch(url)
             const data = await response.json()
-            console.log(data)
+            this.setState({movieToAdd: data})
         }catch(err){console.error(err)}
     }
    
 
-    handleSubmit = e => {
-                
+    handleSubmit = async (e) => {
+        e.preventDefault();
+
+        //Setting movieToAdd in state
+        const url = `https://api.themoviedb.org/3/movie/${e.target[0].id}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`
+        
+        try{
+            const response = await fetch(url)
+            const data = await response.json()
+            this.setState({movieToAdd: data})
+        }catch(err){console.error(err)}
+
+        //adding movieToAdd(set on the above line) to the To-Do array
         this.setState((prevState) => {
 
             let updatedTodoDataArray = prevState.todoDataArray
-            let newTodoItem = this.state.movieToAdd
+            let newTodoItem = prevState.movieToAdd
 
             updatedTodoDataArray.push(newTodoItem)
             // .push creates a duplicate item for some reason, bleow line clears the duplicate item
@@ -70,13 +75,12 @@ class App extends React.Component{
                 typedName: ''
             }
         })
-        console.log(e.target[0].id)
-        //TODO: 1- find the movie from e.target[0].id 2- get the necessary data from the found movie 3- add it to todo array
-        e.preventDefault();
+       
     }
 
 
     handleCheckbox = (id) => {
+        
         this.setState(prevState => { 
             const updatedTodoArray = prevState.todoDataArray.map(todo => {
                 if (todo.id === id) {
@@ -91,7 +95,6 @@ class App extends React.Component{
         })
 
         this.countWatched();
-        this.findMovieFromId(475557);
     }
    
 
@@ -104,6 +107,7 @@ class App extends React.Component{
                 todoObject={items} 
                 handleCheckbox = {this.handleCheckbox}/> 
             )
+            
         return(
             <div className='m-2'>
 
@@ -114,7 +118,9 @@ class App extends React.Component{
                 </p>
 
                 <SearchBar
-                    handleSubmit={this.handleSubmit}/>
+                    handleSubmit={(e) => {; 
+                        this.handleSubmit(e)}}
+                    />
             </div>
         )
     }
