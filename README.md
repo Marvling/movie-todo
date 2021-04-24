@@ -8,6 +8,8 @@ Learing React as I make this
 
 ## to-do list for to-do list
 
+- [ ] **release this on my website**
+
 - [ ] Initial Styling
 
 - [ ] Implement sidecreen for movie info
