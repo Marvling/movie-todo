@@ -33,11 +33,11 @@ class TodoCanvas extends React.Component{
         })
     }
 
-    handleSubmit = async (e) => {
+    handleSubmit = async (e,id) => {
         e.preventDefault();
 
         //getting the movie details using the movie id
-        const url = `https://api.themoviedb.org/3/movie/${e.target[0].id}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`
+        const url = `https://api.themoviedb.org/3/movie/${id}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`
         
         try{
             const response = await fetch(url)
@@ -62,6 +62,9 @@ class TodoCanvas extends React.Component{
         })
     }
 
+    debug = (e) =>{
+        console.log(e.target.id);
+    }
 
     handleCheckbox = (id) => {
         
@@ -103,9 +106,9 @@ class TodoCanvas extends React.Component{
                 </p>
 
                 <SearchBar
-                    handleSubmit={(e) => {; 
-                        this.handleSubmit(e)}}
-                    />
+                    handleSubmit={(e) => {this.handleSubmit(e, e.target[0].id)}}
+                    addToList={(e) => {this.handleSubmit(e, e.target.id)}}
+                    showInfo={this.props.showInfo}/>
             </div>
         )
     }

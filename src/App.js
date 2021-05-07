@@ -4,7 +4,7 @@ import InfoCanvas from './components/InfoCanvas'
 
 function App () {
 
-    const [movieDisplayed, setMovieDisplayed] = useState(790)
+    const [movieDisplayed, setMovieDisplayed] = useState(555)
 
     const getMovieDetails = async (movieId) =>{
         const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`
@@ -23,7 +23,8 @@ function App () {
     return(
         <div className='grid grid-cols-2 gap-2'>
             <TodoCanvas
-                revealSidebar = {(e)=> getMovieDetails(e.target.id)}/>
+                revealSidebar = {(e)=> getMovieDetails(e.target.id)}
+                showInfo = {(e)=>getMovieDetails(e.target.id)}/>
             <InfoCanvas
                 movieDisplayed = {movieDisplayed}/>
         </div>

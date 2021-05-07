@@ -16,7 +16,7 @@ function SearchBar (props) {
             const response = await fetch(url)
             const data = await response.json()
             if(!data.error){
-                setSuggestionArray(data.results.splice(0,5))
+                setSuggestionArray(data.results)
             }
         }catch(err){
             console.error(`this is my error!: ${err}`)
@@ -41,7 +41,9 @@ function SearchBar (props) {
         </form>
         <Suggestions 
             query={query}
-            setQuery={e => {setQuery(e.target.innerText); getTmdbId(e)}}
+            setQuery={e => {setQuery(e.target.innerText.slice(0,-10)); getTmdbId(e)}}
+            addToList={props.addToList}
+            showInfo={props.showInfo}
             suggestionArray = {suggestionArray}/>
         
     </>
