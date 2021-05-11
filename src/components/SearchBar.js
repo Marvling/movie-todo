@@ -4,24 +4,29 @@ import Suggestions from './Suggestions'
 function SearchBar (props) {
 
     const [query, setQuery] = useState('')
-    const [suggestionArray, setSuggestionArray] = useState([])
+    const [suggestionArray, setSuggestionArray] = useState([ ])
     const [tmdbId, setTmdbId] = useState('')
 
     const searchMovies = async (e) => {
         e.preventDefault()
 
-        let url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${e.target.value}&page=1&include_adult=false`
+        let url
+
+        //prevents error when the textbox is empty
+        if (e.target.value !== ''){
+            url = `https://api.themoviedb.org/3/search/movie?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US&query=${e.target.value}&page=1&include_adult=false`
+        }else{
+            setSuggestionArray([ ])
+        }
         
         try{
             const response = await fetch(url)
             const data = await response.json()
-            if(!data.error){
-                setSuggestionArray(data.results)
-            }
+            setSuggestionArray(data.results)
+
         }catch(err){
             console.error(`this is my error!: ${err}`)
-            //sets suggestion array to empty so it shows 'no suggestions found' if no movies were found
-            setSuggestionArray([])}
+            }
     }
 
     const getTmdbId = (e) =>{
@@ -32,12 +37,16 @@ function SearchBar (props) {
     <>
         <form onSubmit={props.handleSubmit}> 
             <input 
-                className='bg-red-400' 
+                className='border-2 placeholder-red-500 text-italic'
+                placeholder='search here'
                 type="text"
                 onChange={e => {setQuery(e.target.value);  searchMovies(e)}}
                 value={query}
                 id={tmdbId}/>
-            <button>Add to List</button>
+            <button
+                className = 'ml-2'>
+                Add
+            </button>
         </form>
         <Suggestions 
             query={query}

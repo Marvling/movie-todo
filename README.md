@@ -2,29 +2,30 @@
 
 A todo app for movies.
 Made with React, Tailwind CSS, and TMDB api
-
-Currently very early on development.
-Learing React as I make this
+First react app
 
 ## to-do list for to-do list
 
-- [ ] **release this on my website**
+- [ ] **build & release on my marvling.github.io**
+  - [ ] look into github releases (may not be required)
 
-- [ ] Initial Styling
-  - [ ] should be clear to click on the name(label component) to bring up the infoCanvas
+- [X] Initial Styling
+- [ ] Collapsing manus for InfoCanvas
 
-- [ ] (Suggestions.js) write exceptions for when a movie doesnt have a data
+- [X] (Suggestions.js) write exceptions for when a movie doesnt have a data
+  -[ ] May need improving
 - [ ] Clean-up: hooks in App.js, hooks in Searchbar.js
 
-- [ ] Implement sidecreen for movie info
+- [X] Implement sidecreen for movie info
   - [X] create another component that appears next to the list (I have no idea)
-    - [X] maybe the there needs to be a TodoCanvas.js and SideScreen.js that live in App.js
+  - [X] maybe the there needs to be a TodoCanvas.js and SideScreen.js that live in App.js
 
 - [X] format todoData.js so it's compatible with TMDB data
 
-- [ ] When clicked on suggestion, the movie info is displayed
-  - [ ] there is an add button next to the movie name in suggestions
-  - [ ] Empty div when the search bar is empty (doesn't say no suggestions available)
+- [X] When clicked on suggestion, the movie info is displayed
+  - [X] there is an add button next to the movie name in suggestions
+  - [ ] Empty div when the search bar is empty
+  - [ ] 'no suggestions' only when search fails
 
 - [ ] Conditional Rendering for when there is no movie poster on TMDB(maybe search wikipedia for poster)
 

@@ -6,7 +6,7 @@ function Suggestions(props) {
     let suggestionsListComponent;
 
     //If .fetch returned any results the array will be populated
-    if (props.suggestionArray.length >= 0) {
+    if (props.suggestionArray.length > 0) {
 
             //spreading the names of the suggestionArray to <li> tag
             const suggested = props.suggestionArray.map((movie, index) => 
@@ -16,7 +16,7 @@ function Suggestions(props) {
                     key = {index}
                     id = {movie.id}
                     onClick={props.showInfo}>
-                    {movie.original_title} - {movie.release_date.slice(0, 4)}
+                    {movie.original_title} - {movie.release_date ? movie.release_date.slice(0, 4) : 'N/A'}
                     <button
                         className={'border-2'}
                         id={movie.id}
