@@ -15,6 +15,7 @@ First react app
 - [X] (Suggestions.js) write exceptions for when a movie doesnt have a data
   -[ ] May need improving
 - [ ] Clean-up: hooks in App.js, hooks in Searchbar.js
+- [ ] movieToAdd state in TodoCanvas may be unnecessary
 
 - [X] Implement sidecreen for movie info
   - [X] create another component that appears next to the list (I have no idea)

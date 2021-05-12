@@ -5,37 +5,53 @@ import config from '../tmdbApiConfig'
 
 const InfoCanvas = (props) => {
 
-    const buildPosterUrl = (posterPath) => {
-        const imageConfig = config[0].images
-        return `${imageConfig.secure_base_url}w300${posterPath}`
-    }
-
-    const {title, poster_path, release_date} = props.movieDisplayed
-
-
-    const accessibilityIds = {
-        checkbox: 'accessible-marker-example1',
-        button: 'accessible-marker-example2'
-      };
-
-    const [isCheckboxCollapseOpen, setIsCheckboxCollapseOpen] = useState(false);
+    // react-collapse options
     const [isButtonCollapseOpen, setIsButtonCollapseOpen] = useState(false);
-  
-    const onChange = useCallback(
-      ({target: {checked}}) => setIsCheckboxCollapseOpen(checked),
-      [setIsCheckboxCollapseOpen]
-    );
   
     const onClick = useCallback(
       () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
       [isButtonCollapseOpen]
     );
-  
+
+    // getting the poster 
+    const buildImageUrl = (path, type) => {
+        const imgUrl = config[0].images.secure_base_url
+        const posterSize = 'w342'
+        const profileSize = 'w185'
+
+        if(path){
+            if (type === 'poster') {
+                return `${imgUrl}${posterSize}${path}`
+            } 
+            else if (type === 'profile') {
+                return `${imgUrl}${profileSize}${path}`
+            }
+        }else{return '/profile-nan.jpg'}
+    }
+
+    //deconstructing the movieDetails object
+    const {title, poster_path, release_date} = props.movieDetails
+
+    // getting actors from movieCredits object
+    const actors = props.movieCredits.cast.map((actor) => 
+        <li className='mb-2'>
+            <div className='flex'>
+            <img 
+                className='w-10 h-15 rounded-lg mr-2' 
+                src={buildImageUrl(actor.profile_path, 'profile')}
+                alt = {`Face of ${actor.name}`}/>
+            
+            <p>{actor.name}<br/>{actor.character}</p>
+            </div>
+        </li>
+    )
+    
+
 
     return(
         <div>
             <img
-                src={buildPosterUrl(poster_path)} 
+                src={buildImageUrl(poster_path, 'poster')} 
                 alt={`Movie Poster for ${title}`}/>
             <p
                 className='text-2xl'>
@@ -50,26 +66,25 @@ const InfoCanvas = (props) => {
             <h2>Directors & Writers</h2>
 
             <div>                
-                <div className="config">
+                <div>
                     <button
-                    aria-controls={accessibilityIds.button}
+                    className='text-bold'
+                    aria-controls='accessible-marker-button'
                     aria-expanded={isButtonCollapseOpen}
                     onClick={onClick}
                     type="button">
-                    Reveal content
+                    Actors
                     </button>
                 </div>
 
                 <Collapse
                     isOpened={isButtonCollapseOpen}>
-                    <div className='h-16' id={accessibilityIds.button}>
-                        <p>Buraya bakarlar</p>
-                    </div>
+                    <ul>
+                        {[...actors]}
+                    </ul>
                 </Collapse>
-
             </div>
 
-            <h2>Actors</h2>
             <p>Crew</p>
             <p>Production Companies</p>
             <p>Financial Data</p>

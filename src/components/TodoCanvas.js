@@ -93,7 +93,7 @@ class TodoCanvas extends React.Component{
                 key={items.id}
                 todoObject={items}
                 handleCheckbox = {this.handleCheckbox}
-                revealSidebar={this.props.revealSidebar}/>
+                showInfo={this.props.showInfo}/>
             )
             
         return(

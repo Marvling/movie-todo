@@ -1,5 +1,5 @@
 const config = [
-{
+  {
     "images": {
       "base_url": "http://image.tmdb.org/t/p/",
       "secure_base_url": "https://image.tmdb.org/t/p/",
@@ -95,7 +95,7 @@ const config = [
       "video",
       "videos"
     ]
-}
+  }
 ]
 
 export default config
