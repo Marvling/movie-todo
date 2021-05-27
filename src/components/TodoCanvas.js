@@ -3,6 +3,7 @@ import TodoItem from './TodoItem'
 import SearchBar from './SearchBar'
 import todoData from './todoData'
 
+// TODO: REFACTOR USING HOOKS
 class TodoCanvas extends React.Component{
     constructor(props){
         super(props)

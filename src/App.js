@@ -5,7 +5,7 @@ import InfoCanvas from './components/InfoCanvas'
 function App () {
 
     const [movieDetails, setMovieDetails] = useState({release_date: '1234'})
-    const [movieCredits, setMovieCredits] = useState({cast: []})
+    const [movieCredits, setMovieCredits] = useState({cast: [], crew: []})
 
     const getMovieDetails = async (movieId) =>{
         const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=00decbdccac0d50538a8bdbf8085ce4a&language=en-US`

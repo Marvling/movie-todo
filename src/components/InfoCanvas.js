@@ -6,12 +6,22 @@ import config from '../tmdbApiConfig'
 const InfoCanvas = (props) => {
 
     // react-collapse options
-    const [isButtonCollapseOpen, setIsButtonCollapseOpen] = useState(false);
+    const [isActorCollapseOpen, setIsActorCollapseOpen] = useState(false);
+    const [isDirectorCollapseOpen, setIsDirectorCollapseOpen] = useState(false);
   
-    const onClick = useCallback(
-      () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
-      [isButtonCollapseOpen]
-    );
+    // const onClick = useCallback(
+    //   () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
+    //   [isButtonCollapseOpen]
+    // );
+
+    const collapseHandler = (e) => {
+
+        if (e.target.innerHTML === 'Actors')
+        setIsActorCollapseOpen(!isActorCollapseOpen)
+        else if (e.target.innerHTML === 'Directors')
+        setIsDirectorCollapseOpen(!isDirectorCollapseOpen)
+
+    }
 
     // getting the poster 
     const buildImageUrl = (path, type) => {
@@ -44,9 +54,35 @@ const InfoCanvas = (props) => {
             <p>{actor.name}<br/>{actor.character}</p>
             </div>
         </li>
-    )
-    
+    );
 
+    //
+
+    // redo this part, should be more concise, less repeat
+    // write a function that creates a filtered array and returns a <li>
+
+    const crew = props.movieCredits.crew
+
+    const Directing = crew.filter(x => x.department === 'Directing')
+    const Writing = crew.filter(x => x.department === 'Writing')
+    const Art = crew.filter(x => x.department === 'Art')
+    const Sound = crew.filter(x => x.department === 'Sound')
+    const Production = crew.filter(x => x.department === 'Production')
+    const Camera = crew.filter(x => x.department === 'Camera')
+
+    const Directors = Directing.map((crew) => 
+        <li className='mb-2'>
+            <div className='flex'>
+            <img 
+                className='w-10 h-15 rounded-lg mr-2' 
+                src={buildImageUrl(crew.profile_path, 'profile')}
+                alt = {`Face of ${crew.name}`}/>
+            <p>{crew.name}<br/>{crew.job}</p>
+            </div>
+        </li>
+    );
+
+    //Art, Sound, Crew, Production, Writing & Directing, Camera
 
     return(
         <div>
@@ -63,29 +99,50 @@ const InfoCanvas = (props) => {
                 {release_date.slice(0,4)}
             </h2>
 
-            <h2>Directors & Writers</h2>
-
-            <div>                
+            <div>
                 <div>
                     <button
                     className='text-bold'
                     aria-controls='accessible-marker-button'
-                    aria-expanded={isButtonCollapseOpen}
-                    onClick={onClick}
+                    aria-expanded={isActorCollapseOpen}
+                    onClick={collapseHandler}
                     type="button">
                     Actors
                     </button>
                 </div>
-
-                <Collapse
-                    isOpened={isButtonCollapseOpen}>
-                    <ul>
-                        {[...actors]}
-                    </ul>
-                </Collapse>
+                <div
+                className = {`${isActorCollapseOpen ? 'h-64' : ''} overflow-auto`}>
+                    <Collapse
+                    isOpened={isActorCollapseOpen}>
+                        <ul>
+                            {[...actors]}
+                        </ul>
+                    </Collapse>
+                </div>
             </div>
 
-            <p>Crew</p>
+            <div>
+                <div>
+                    <button
+                    className='text-bold'
+                    aria-controls='accessible-marker-button'
+                    aria-expanded={isDirectorCollapseOpen}
+                    onClick={collapseHandler}
+                    type="button">
+                    Directors
+                    </button>
+                </div>
+                <div
+                className = {`${isDirectorCollapseOpen ? 'h-64' : ''} overflow-auto`}>
+                    <Collapse
+                    isOpened={isDirectorCollapseOpen}>
+                        <ul>
+                            {[...Directors]}
+                        </ul>
+                    </Collapse>
+                </div>
+            </div>
+
             <p>Production Companies</p>
             <p>Financial Data</p>
             <p>IMDB ID</p>
