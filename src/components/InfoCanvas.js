@@ -9,10 +9,6 @@ const InfoCanvas = (props) => {
     const [isActorCollapseOpen, setIsActorCollapseOpen] = useState(false);
     const [isDirectorCollapseOpen, setIsDirectorCollapseOpen] = useState(false);
   
-    // const onClick = useCallback(
-    //   () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
-    //   [isButtonCollapseOpen]
-    // );
 
     const collapseHandler = (e) => {
 
@@ -38,9 +34,6 @@ const InfoCanvas = (props) => {
             }
         }else{return '/profile-nan.jpg'}
     }
-
-    //deconstructing the movieDetails object
-    const {title, poster_path, release_date} = props.movieDetails
 
     // getting actors from movieCredits object
     const actors = props.movieCredits.cast.map((actor) => 
@@ -84,20 +77,24 @@ const InfoCanvas = (props) => {
 
     //Art, Sound, Crew, Production, Writing & Directing, Camera
 
+    //deconstructing the movieDetails object
+    const {title, poster_path, release_date} = props.movieDetails
+
     return(
         <div>
-            <img
-                src={buildImageUrl(poster_path, 'poster')} 
-                alt={`Movie Poster for ${title}`}/>
             <p
                 className='text-2xl'>
                 {title}
             </p>
-            
-            <h2
-                className=' mb-2 text-lg'>
+            <p
+                className='text-base'>
                 {release_date.slice(0,4)}
-            </h2>
+            </p>
+            <img
+                className='w-44'
+                src={buildImageUrl(poster_path, 'poster')} 
+                alt={`Movie Poster for ${title}`}>
+            </img>            
 
             <div>
                 <div>

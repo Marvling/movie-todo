@@ -15,7 +15,7 @@ const TodoItem = (props) => {
             id={props.todoObject.id}>
             {props.todoObject.title} - {props.todoObject.release_date.slice(0, 4)}
         </label>
-        <p>{props.todoObject.genres.map((genre) => <span>{`${genre.name} `}</span>)}</p>
+        {/* <p>{props.todoObject.genres.map((genre) => <span>{`${genre.name} `}</span>)}</p> */}
     </li>)
 }
 

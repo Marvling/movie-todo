@@ -41,7 +41,8 @@ function App () {
             <TodoCanvas
                 showInfo = {(e)=>{getMovieDetails(e.target.id); getMovieCredits(e.target.id)}}/>
             </div>   
-            <div className='border-8' >
+            <div 
+                className='border-8 w-13' >
             <InfoCanvas
                 movieDetails = {movieDetails}
                 movieCredits = {movieCredits}/>
