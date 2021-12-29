@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import TodoCanvas from './components/TodoCanvas'
 import InfoCanvas from './components/InfoCanvas'
 
-function App () {
+function App () {1
 
     const [movieDetails, setMovieDetails] = useState({release_date: '1234'})
     const [movieCredits, setMovieCredits] = useState({cast: [], crew: []})
