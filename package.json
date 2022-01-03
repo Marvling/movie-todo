@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Marvling/movie-todo#readme",
   "dependencies": {
     "react": "^17.0.2",
+    "react-collapse": "^5.1.1",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {

@@ -44,7 +44,7 @@ module.exports = {
 
     host,
 
-    port: 8000,
+    port: 8001,
 
     // Public path is root of content base
     // THROWS ERROR, WON'T SERVE
