@@ -74,7 +74,12 @@ module.exports = {
             require.resolve('babel-preset-react-app'),
           ]
         }
-      }
+      },
+      
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader", "postcss-loader"],
+      },
     ],
   },
 
